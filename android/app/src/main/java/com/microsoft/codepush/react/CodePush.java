@@ -146,27 +146,35 @@ public class CodePush implements ReactPackage {
         return null;
     }
 
-    private boolean isLiveReloadEnabled(ReactInstanceManager instanceManager) {
-        // Use instanceManager for checking if we use LiveReload mode. In this case we should not remove ReactNativeDevBundle.js file
-        // because we get error with trying to get this after reloading. Issue: https://github.com/microsoft/react-native-code-push/issues/1272
-        if (instanceManager != null) {
-            DevSupportManager devSupportManager = instanceManager.getDevSupportManager();
-            if (devSupportManager != null) {
-                DevInternalSettings devInternalSettings = (DevInternalSettings)devSupportManager.getDevSettings();
-                Method[] methods = devInternalSettings.getClass().getMethods();
-                for (Method m : methods) {
-                    if (m.getName().equals("isReloadOnJSChangeEnabled")) {
-                        try {
-                            return (boolean) m.invoke(devInternalSettings);
-                        } catch (Exception x) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
+    // private boolean isLiveReloadEnabled(ReactInstanceManager instanceManager) {
+    //     // Use instanceManager for checking if we use LiveReload mode. In this case we should not remove ReactNativeDevBundle.js file
+    //     // because we get error with trying to get this after reloading. Issue: https://github.com/microsoft/react-native-code-push/issues/1272
+    //     if (instanceManager != null) {
+    //         DevSupportManager devSupportManager = instanceManager.getDevSupportManager();
+    //         if (devSupportManager != null) {
+    //             DevInternalSettings devInternalSettings = (DevInternalSettings)devSupportManager.getDevSettings();
+    //             Method[] methods = devInternalSettings.getClass().getMethods();
+    //             for (Method m : methods) {
+    //                 if (m.getName().equals("isReloadOnJSChangeEnabled")) {
+    //                     try {
+    //                         return (boolean) m.invoke(devInternalSettings);
+    //                     } catch (Exception x) {
+    //                         return false;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        return false;
+    //     return false;
+    // }
+
+    private boolean isLiveReloadEnabled(ReactInstanceManager instanceManager) {
+        // A verificação original foi desativada para compatibilidade com React Native 0.74+.
+        // A classe DevInternalSettings não é mais pública.
+        // Retornar 'true' é a opção mais segura para evitar que o cache de debug seja
+        // limpo incorretamente durante o desenvolvimento.
+        return true;
     }
 
     public void clearDebugCacheIfNeeded(ReactInstanceManager instanceManager) {
