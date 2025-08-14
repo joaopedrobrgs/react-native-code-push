@@ -642,15 +642,16 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void notifyApplicationReady(Promise promise) {
-    try {
-        mSettingsManager.removePendingUpdate();
-        if(promise!=null){
-            promise.resolve("");
-        }
-    } catch(CodePushUnknownException e) {
-        CodePushUtils.log(e);
-        if(promise!=null) {
-            promise.reject(e);
+        try {
+            mSettingsManager.removePendingUpdate();
+            if(promise!=null){
+                promise.resolve("");
+            }
+        } catch(CodePushUnknownException e) {
+            CodePushUtils.log(e);
+            if(promise!=null) {
+                promise.reject(e);
+            }
         }
     }
 
