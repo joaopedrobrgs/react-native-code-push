@@ -156,6 +156,7 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
                         //resetReactRootViews(instanceManager);
 
                         //instanceManager.recreateReactContextInBackground();
+                        notifyApplicationReady(null);
                         ReactActivity activity = (ReactActivity) getCurrentActivity();
                         Objects.requireNonNull(activity.getReactDelegate()).reload();
                         mCodePush.initializeUpdateAfterRestart();
@@ -641,11 +642,14 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void notifyApplicationReady(Promise promise) {
-        try {
-            mSettingsManager.removePendingUpdate();
+    try {
+        mSettingsManager.removePendingUpdate();
+        if(promise!=null){
             promise.resolve("");
-        } catch(CodePushUnknownException e) {
-            CodePushUtils.log(e);
+        }
+    } catch(CodePushUnknownException e) {
+        CodePushUtils.log(e);
+        if(promise!=null) {
             promise.reject(e);
         }
     }
